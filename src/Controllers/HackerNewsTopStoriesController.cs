@@ -1,15 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+using Santander.DevCodingTest.Models;
+
 namespace Santander.DevCodingTest.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class HackerNewsTopStoriesController : Controller
+    [Route("api/hacker-news/stories")]
+    public class HackerNewsTopStoriesController : ControllerBase
     {
-        [HttpGet(Name = "HackerNewsTopStories")]
-        public IActionResult Get()
+        [HttpGet("best")]
+        public IActionResult Get([FromQuery] int top)
         {
-            return Ok();
+            var bestStoryResponse = new List<BestStoryResponse>
+        {
+            new BestStoryResponse
+            {
+                Title = "Sample Story",
+                Uri = "https://example.com/sample-story",
+                PostedBy = "sampleuser",
+                Time = DateTimeOffset.UtcNow,
+                Score = 100,
+                CommentCount = 50
+            }
+        };
+
+            return Ok(bestStoryResponse);
         }
     }
 }
