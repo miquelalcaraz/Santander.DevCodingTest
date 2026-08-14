@@ -1,3 +1,8 @@
 <Solution>
-  <Project Path="src/HackerNewsAggregator.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/HackerNewsAggregator.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FunctionalTests/FunctionalTests.csproj" Id="a5ec98dd-9789-45ca-93df-8cbcb8659c66" />
+  </Folder>
 </Solution>
