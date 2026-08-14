@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Santander.DevCodingTest.Services;
-
-namespace FunctionalTests.HackerNewsServiceTesting
+﻿namespace FunctionalTests.HackerNewsServiceTesting
 {
 
     public class GetStoryAsync : IClassFixture<HackerNewsServiceFixture>

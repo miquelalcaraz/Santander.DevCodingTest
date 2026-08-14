@@ -1,10 +1,4 @@
-﻿using System.Text.Json;
-
-using Santander.DevCodingTest.Services;
-
-using FunctionalTests;
-
-namespace FunctionalTests.HackerNewsServiceTesting;
+﻿namespace FunctionalTests.HackerNewsServiceTesting;
 
 public class GetBestStoriesAsync : IClassFixture<HackerNewsServiceFixture>
 {
