@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
+using Santander.DevCodingTest.Contracts;
 using Santander.DevCodingTest.Models;
-using Santander.DevCodingTest.Services;
 
 namespace Santander.DevCodingTest.Controllers
 {

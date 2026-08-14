@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-using Santander.DevCodingTest.Services;
+using Santander.DevCodingTest.Contracts;
 
 namespace FunctionalTests.HackerNewsServiceTesting;
 

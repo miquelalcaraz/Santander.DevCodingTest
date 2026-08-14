@@ -1,4 +1,5 @@
-﻿using Santander.DevCodingTest.Models;
+﻿using Santander.DevCodingTest.Contracts;
+using Santander.DevCodingTest.Models;
 
 namespace Santander.DevCodingTest.Services
 {

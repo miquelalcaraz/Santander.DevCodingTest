@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 
+using Santander.DevCodingTest.Contracts;
 using Santander.DevCodingTest.Models;
 
 namespace Santander.DevCodingTest.Services

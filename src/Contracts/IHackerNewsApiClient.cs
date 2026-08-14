@@ -1,6 +1,6 @@
 ﻿using Santander.DevCodingTest.Models;
 
-namespace Santander.DevCodingTest.Services
+namespace Santander.DevCodingTest.Contracts
 {
     public interface IHackerNewsApiClient
     {
