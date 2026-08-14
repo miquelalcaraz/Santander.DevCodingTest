@@ -18,13 +18,23 @@ namespace Santander.DevCodingTest.Services
 
             var storyIds = await _apiClient.GetBestStoryIdsAsync(cancellationToken);
 
-            var storyTasks = storyIds.Select(id => _apiClient.GetItemAsync(id, cancellationToken));
-            var stories = await Task.WhenAll(storyTasks);
+            var stories = new System.Collections.Concurrent.ConcurrentBag<HackerNewsItem>();
+            ParallelOptions parallelOptions = new()
+            {
+                MaxDegreeOfParallelism = 10,
+                CancellationToken = cancellationToken
+            };
+            await Parallel.ForEachAsync(storyIds, parallelOptions,
+                async (id, ct) =>
+                {
+                    var item = await _apiClient.GetItemAsync(id, ct);
+                    if (item is not null)
+                        stories.Add(item);
+                });
 
             return stories
-                .Where(story => story is not null)
-               .Select(story => BestStoryResponse.From(story!))
-                .OrderByDescending(story => story.Score)
+                .Select(BestStoryResponse.From)
+                .OrderByDescending(s => s.Score)
                 .Take(count)
                 .ToArray();
         }
