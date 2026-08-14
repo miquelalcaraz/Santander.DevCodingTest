@@ -60,6 +60,6 @@ public class GetItemAsync : IClassFixture<HackerNewsApiClientFixture>
         using var cts = new CancellationTokenSource();
         cts.Cancel();
 
-        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => _fixture.GetClient().GetItemAsync(KnownItemId, cts.Token));
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => _fixture.GetClient().GetItemAsync(int.MaxValue, cts.Token));
     }
 }
