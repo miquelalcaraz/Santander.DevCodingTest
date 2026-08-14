@@ -1,4 +1,10 @@
-﻿namespace FunctionalTests.HackerNewsServiceTesting
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using Santander.DevCodingTest.Services;
+
+namespace FunctionalTests.HackerNewsServiceTesting
 {
 
     public class GetStoryAsync : IClassFixture<HackerNewsServiceFixture>
@@ -17,7 +23,7 @@
 
         }
 
-        [Fact]
+        [Fact(Skip = "Not implemented yet")]
         public async Task GetStory_returnsStory()
         {
             throw new NotImplementedException();

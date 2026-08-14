@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 using Santander.DevCodingTest.Models;
 using Santander.DevCodingTest.Services;
@@ -7,6 +8,7 @@ namespace Santander.DevCodingTest.Controllers
 {
     [ApiController]
     [Route("api/hacker-news/stories")]
+    [EnableRateLimiting("hackernews-policy")]
     public class HackerNewsTopStoriesController : ControllerBase
     {
         private readonly IHackerNewsService _hackerNewsService;

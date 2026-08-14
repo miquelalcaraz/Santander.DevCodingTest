@@ -1,5 +1,12 @@
 
+using System.Threading.RateLimiting;
+
+using Microsoft.AspNetCore.RateLimiting;
+
+
 using Santander.DevCodingTest.Services;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,6 +21,19 @@ builder.Services.AddHttpClient<IHackerNewsService, HackerNewsService>(client =>
     client.BaseAddress = new Uri("https://hacker-news.firebaseio.com/");
 });
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    options.AddFixedWindowLimiter("hackernews-policy", limiter =>
+    {
+        limiter.PermitLimit = 3;
+        limiter.Window = TimeSpan.FromSeconds(60);
+        limiter.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        limiter.QueueLimit = 0;
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,7 +44,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseRateLimiter();
 app.UseAuthorization();
 
 
