@@ -16,10 +16,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddHttpClient<IHackerNewsService, HackerNewsService>(client =>
+builder.Services.AddHttpClient<IHackerNewsApiClient, HackerNewsApiClient>(client =>
 {
     client.BaseAddress = new Uri("https://hacker-news.firebaseio.com/");
 });
+builder.Services.AddSingleton<IHackerNewsService, HackerNewsService>();
+
 
 builder.Services.AddRateLimiter(options =>
 {
