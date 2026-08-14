@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 using Santander.DevCodingTest.Contracts;
 using Santander.DevCodingTest.Models;
@@ -12,13 +13,16 @@ namespace Santander.DevCodingTest.Services
         private readonly HttpClient _httpClient;
         private const string BestStoryIdsCacheKey = "hackernews:beststoryids";
         private readonly IMemoryCache _cache;
+        private readonly HackerNewsOptions _options;
 
 
-        public HackerNewsApiClient(HttpClient httpClient, IMemoryCache cache)
+        public HackerNewsApiClient(HttpClient httpClient, IMemoryCache cache, IOptions<HackerNewsOptions> options)
 
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            _httpClient.BaseAddress = new Uri(_options.BaseUrl);
         }
 
         public async Task<IEnumerable<int>> GetBestStoryIdsAsync(CancellationToken cancellationToken = default)
@@ -28,7 +32,7 @@ namespace Santander.DevCodingTest.Services
 
             var result = await _httpClient.GetFromJsonAsync<int[]>(BestStoriesPath, cancellationToken);
             if (result is not null)
-                _cache.Set(BestStoryIdsCacheKey, result, TimeSpan.FromMinutes(5));
+                _cache.Set(BestStoryIdsCacheKey, result, _options.StoryIdsTtl);
 
             return result ?? Array.Empty<int>();
         }
@@ -43,7 +47,7 @@ namespace Santander.DevCodingTest.Services
             var item = await _httpClient.GetFromJsonAsync<HackerNewsItem>(string.Format(ItemPath, id), cancellationToken);
 
             if (item is not null)
-                _cache.Set(cacheKey, item, TimeSpan.FromMinutes(5));
+                _cache.Set(cacheKey, item, _options.ItemTtl);
 
             return item;
         }

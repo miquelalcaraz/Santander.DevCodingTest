@@ -2,10 +2,11 @@
 using System.Threading.RateLimiting;
 
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Options;
 
-
-using Santander.DevCodingTest.Services;
+using Santander.DevCodingTest;
 using Santander.DevCodingTest.Contracts;
+using Santander.DevCodingTest.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,26 +18,28 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
 
+builder.Services.Configure<HackerNewsOptions>(builder.Configuration.GetSection(HackerNewsOptions.SectionName));
 
-builder.Services.AddHttpClient<IHackerNewsApiClient, HackerNewsApiClient>(client =>
-{
-    client.BaseAddress = new Uri("https://hacker-news.firebaseio.com/");
-});
+builder.Services.AddHttpClient<IHackerNewsApiClient, HackerNewsApiClient>();
 builder.Services.AddSingleton<IHackerNewsService, HackerNewsService>();
 
 
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-
-    options.AddFixedWindowLimiter("hackernews-policy", limiter =>
-    {
-        limiter.PermitLimit = 3;
-        limiter.Window = TimeSpan.FromSeconds(60);
-        limiter.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        limiter.QueueLimit = 0;
-    });
 });
+builder.Services.AddOptions<RateLimiterOptions>()
+    .Configure<IOptions<HackerNewsOptions>>((rateLimiterOptions, hnOptions) =>
+    {
+        var rl = hnOptions.Value.RateLimiting;
+        rateLimiterOptions.AddFixedWindowLimiter("hackernews-policy", limiter =>
+        {
+            limiter.PermitLimit = rl.PermitLimit;
+            limiter.Window = rl.Window;
+            limiter.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            limiter.QueueLimit = rl.QueueLimit;
+        });
+    });
 
 var app = builder.Build();
 

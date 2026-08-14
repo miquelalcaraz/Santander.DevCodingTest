@@ -18,9 +18,8 @@ namespace FunctionalTests.HackerNewsTopStoriesControllerTesting
         public async Task ExceedingRateLimit_Returns429()
         {
             var client = _fixture.CreateClient();
-            int permitLimit = 3;
 
-            for (int i = 0; i < permitLimit; i++)
+            for (int i = 0; i < ControllerFixture.PermitLimit; i++)
             {
                 var response = await client.GetAsync("/api/hacker-news/stories/best?top=1");
                 Assert.NotEqual(HttpStatusCode.TooManyRequests, response.StatusCode);

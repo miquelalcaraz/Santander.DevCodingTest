@@ -1,4 +1,6 @@
-﻿using Santander.DevCodingTest.Contracts;
+﻿using Microsoft.Extensions.Options;
+
+using Santander.DevCodingTest.Contracts;
 using Santander.DevCodingTest.Models;
 
 namespace Santander.DevCodingTest.Services
@@ -6,10 +8,12 @@ namespace Santander.DevCodingTest.Services
     public class HackerNewsService : IHackerNewsService
     {
         private readonly IHackerNewsApiClient _apiClient;
+        private readonly HackerNewsOptions _options;
 
-        public HackerNewsService(IHackerNewsApiClient apiClient)
+        public HackerNewsService(IHackerNewsApiClient apiClient, IOptions<HackerNewsOptions> options)
         {
             _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task<IReadOnlyList<BestStoryResponse>> GetBestStoriesAsync(int count, CancellationToken cancellationToken = default)
@@ -22,7 +26,7 @@ namespace Santander.DevCodingTest.Services
             var stories = new System.Collections.Concurrent.ConcurrentBag<HackerNewsItem>();
             ParallelOptions parallelOptions = new()
             {
-                MaxDegreeOfParallelism = 10,
+                MaxDegreeOfParallelism = _options.Parallelism.MaxDegreeOfParallelism,
                 CancellationToken = cancellationToken
             };
             await Parallel.ForEachAsync(storyIds, parallelOptions,
