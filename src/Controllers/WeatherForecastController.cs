@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Santander.Developer.Coding.Controllers
+namespace Santander.DevCodingTest.Controllers
 {
     [ApiController]
     [Route("[controller]")]

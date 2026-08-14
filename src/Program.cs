@@ -1,5 +1,4 @@
-
-namespace Santander.Developer.Coding
+namespace Santander.DevCodingTest
 {
     public class Program
     {
